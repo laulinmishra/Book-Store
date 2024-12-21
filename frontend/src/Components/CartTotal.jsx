@@ -33,7 +33,7 @@
 
 import React, { useContext } from 'react'
 import Title from './Title'
-import { ShopContext } from '../context/ShopContext'
+import { ShopContext } from '../Context/ShopContext'
 
 const CartTotal = () => {
   const { currency, getCartAmount, delivery_charges } = useContext(ShopContext)
