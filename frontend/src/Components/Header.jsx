@@ -5,7 +5,7 @@ import Navbar from './Navbar'
 import {CgMenuLeft} from 'react-icons/cg'
 import {TbUserCircle} from 'react-icons/tb'
 import {RiUserLine,RiShoppingBag4Line} from 'react-icons/ri'
-import { ShopContext } from '../Context/ShopContext'
+import { ShopContext } from '../context/ShopContext'
 
 
 const Header = () => {
