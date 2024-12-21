@@ -3,7 +3,7 @@ import { RiSearch2Line } from 'react-icons/ri';
 import { categories } from '../assets/data';
 import { LuSettings2 } from 'react-icons/lu';
 import Title from '../Components/Title';
-import { ShopContext } from '../Context/ShopContext';
+import { ShopContext } from '../context/ShopContext';
 import Item from '../Components/Item';
 import Footer from '../Components/Footer';
 

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { TbShoppingBagPlus } from 'react-icons/tb'
-import { ShopContext } from '../Context/ShopContext'
+import { ShopContext } from '../context/ShopContext'
 
 const Item = ({book}) => {
 
