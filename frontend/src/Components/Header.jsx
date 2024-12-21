@@ -5,17 +5,24 @@ import Navbar from './Navbar'
 import {CgMenuLeft} from 'react-icons/cg'
 import {TbUserCircle} from 'react-icons/tb'
 import {RiUserLine,RiShoppingBag4Line} from 'react-icons/ri'
-import { ShopContext } from '../Context/ShopContext'
+import { ShopContext } from '../context/ShopContext'
 
 
 const Header = () => {
 
-  const {navigate, token , setToken, getCartCount} = useContext(ShopContext)
+  const {navigate, token , setToken, getCartCount, setCartItems} = useContext(ShopContext)
   const [active, setActive] = useState(false)
   const [menuOpened,setMenuOpened] = useState(false)
 
   const toggleMenu = ()=>{
     setMenuOpened((prev)=> !prev)
+  }
+
+  const logout = ()=>{
+    navigate('/login')
+    localStorage.removeItem('token')
+    setToken('')
+    setCartItems({})
   }
   
   useEffect(()=>{
@@ -56,13 +63,13 @@ const Header = () => {
                   {token ? (
                     <div><TbUserCircle className='text-[29px] cursor-pointer'/></div>
                   ) :(
-                    <button onClick={()=> navigate('/login')} className='btn-outline flexCenter gap-x-2'>Login<RiUserLine/></button>
+                    <button onClick={()=> navigate('/login')} className='btn-outline   flexCenter gap-x-2'>Login<RiUserLine/></button>
                   )}  
                 </div>
                 {token && <>
                 <ul className='bg-white p-1 w-32 ring-1 ring-slate-900/5 rounded absolute right-0 top-7 hidden group-hover:flex flex-col regular-14 shadow-md'>
-                  <li className='p-2 text-tertiary rounded-md hover:bg-primary cursor-pointer'>Orders</li>
-                  <li className='p-2 text-tertiary rounded-md hover:bg-primary cursor-pointer'>Logout</li>
+                  <li onClick={()=> navigate('/orders')} className='p-2 text-tertiary rounded-md hover:bg-primary cursor-pointer'>Orders</li>
+                  <li onClick={logout} className='p-2 text-tertiary rounded-md hover:bg-primary cursor-pointer'>Logout</li>
                 </ul>
                 </>}
           </div>

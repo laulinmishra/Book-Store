@@ -33,7 +33,7 @@
 
 import React, { useContext } from 'react'
 import Title from './Title'
-import { ShopContext } from '../Context/ShopContext'
+import { ShopContext } from '../context/ShopContext'
 
 const CartTotal = () => {
   const { currency, getCartAmount, delivery_charges } = useContext(ShopContext)
@@ -41,7 +41,7 @@ const CartTotal = () => {
   return (
     <div className='w-full'>
       {/* Title */}
-      <Title title1={'Cart'} title2={'Total'} title1Styles={'h3'} showPara={false} />
+      <Title title1={'Cart '} title2={'Total'} title1Styles={'h3'} showPara={false} />
 
       {/* Subtotal */}
       <div className='flexBetween pt-3'>

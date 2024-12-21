@@ -1,15 +1,18 @@
 import React, { createContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {books} from "../assets/data"
+import axios from "axios"
+import {toast} from "react-toastify"
 
 
-export const ShopContext=createContext()
+export const ShopContext = createContext()
 
 const ShopContextProvider = (props) => {
 
   const currency = '$'
   const delivery_charges = 5
+  const backendUrl = import.meta.env.VITE_BACKEND_URL
   const navigate = useNavigate()
+  const [books, setBooks] = useState([])
   const [token, setToken] = useState("")
   const [cartItems, setCartItems] = useState({})
 
@@ -23,7 +26,18 @@ const ShopContextProvider = (props) => {
       cartData[itemId]=1
     }
     setCartItems(cartData)
+    if(token){
+      try{
+        await axios.post(backendUrl + '/api/cart/add', {itemId}, {headers: {token}})
+      } catch (error){
+        console.log(error)
+        toast.error(error.message)
+
+      }
+    }
+
   }
+  
 
   // Getting total cart items
   const getCartCount = ()=>{
@@ -58,16 +72,65 @@ const ShopContextProvider = (props) => {
 
 
   //Updating the Quantity
-
   const updateQuantity = async (itemId, quantity) =>{
     const cartData = {...cartItems}
     cartData[itemId] = quantity
     setCartItems(cartData)
+
+    if(token){
+      try{
+        await axios.post(backendUrl + '/api/cart/update', {itemId, quantity}, {headers: {token}})
+      }catch(error){
+        console.log(error)
+        toast.error(error.message)
+      }
+    }
   }
 
 
+  //Getting all products data
+  const getProductsData = async ()=>{
+    try{
+      const response = await axios.get(backendUrl + '/api/product/list')
+      if(response.data.success){
+        setBooks(response.data.products)
+      }else{
+        toast.error(response.data.message)
+      }
 
-  const contextValue = {books, currency, navigate, token, setToken, cartItems, setCartItems, addToCart, getCartCount,getCartAmount , updateQuantity, delivery_charges}
+    }catch(error){
+      console.log(error)
+      toast.error(error.message)
+    }
+  }
+
+  //Getting userCart data
+  const getUserCart = async (token)=>{
+    try{
+      const response = await axios.post(backendUrl + '/api/cart/get', {}, { headers: {token}})
+      if (response.data.success) {
+        setCartItems(response.data.cartData)
+      }
+    } catch(error){
+      console.log(error)
+      toast.error(error.message)
+    }
+  }
+
+  useEffect(()=>{
+    if(!token && localStorage.getItem('token')){
+      //prevent Logout upon reload the page if logged in
+      setToken(localStorage.getItem('token')) 
+
+      
+      getUserCart(localStorage.getItem('token'))
+    }
+    getProductsData()
+  },[])
+
+
+
+  const contextValue = {books, currency, navigate, token, setToken, cartItems, setCartItems, addToCart, getCartCount,getCartAmount , updateQuantity, delivery_charges, backendUrl}
   return (
     <ShopContext.Provider value={contextValue}>
       {props.children}
